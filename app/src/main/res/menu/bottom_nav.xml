@@ -4,8 +4,10 @@
         android:id="@+id/MonolithicFragment"
         android:title="Monolithic" />
     <item
+        android:id="@+id/MvvmFragment"
+        android:title="MVVM" />
+
+    <item
         android:id="@+id/MviFragment"
         android:title="MVI" />
-
-<!--    <item android:title="MVP" />-->
 </menu>

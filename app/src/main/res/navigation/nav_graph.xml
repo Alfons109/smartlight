@@ -16,13 +16,19 @@
             app:destination="@id/MviFragment" />
     </fragment>
     <fragment
-        android:id="@+id/MviFragment"
-        android:name="com.example.smartlight.mvi.SecondFragment"
-        android:label="@string/second_fragment_label"
+        android:id="@+id/MvvmFragment"
+        android:name="com.example.smartlight.mvvm.MvvmFragment"
+        android:label="@string/mvvm_fragment_label"
         tools:layout="@layout/fragment_mvi">
 
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/MonolithicFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/MviFragment"
+        android:name="com.example.smartlight.mvi.MviFragment"
+        android:label="@string/mvi_fragment_label"
+        tools:layout="@layout/fragment_mvi">
+
+    </fragment>
+
 </navigation>

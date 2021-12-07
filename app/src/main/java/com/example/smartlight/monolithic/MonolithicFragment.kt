@@ -43,12 +43,6 @@ class MonolithicFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSmartLightBinding.inflate(inflater, container, false)
-        return binding.root
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         binding.buttonOff.setOnClickListener { onButtonClick(it) }
         binding.buttonOn.setOnClickListener { onButtonClick(it) }
@@ -57,6 +51,8 @@ class MonolithicFragment : Fragment() {
 //        binding.buttonNext.setOnClickListener {
 //            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
 //        }
+        return binding.root
+
     }
 
     private fun onButtonClick(view: View) {
@@ -66,17 +62,20 @@ class MonolithicFragment : Fragment() {
             //show the spinner
             binding.progressBar.isVisible = true
 
-            when (view) {
+            val configSelected = when(view) {
                 binding.buttonOff -> {
-                    asyncSmartLightConfigurationUpdate(SmartLightConfig.OFF)
+                    SmartLightConfig.OFF
                 }
                 binding.buttonOn -> {
-                    asyncSmartLightConfigurationUpdate(SmartLightConfig.ON)
+                    SmartLightConfig.ON
                 }
                 binding.buttonAlert -> {
-                    asyncSmartLightConfigurationUpdate(SmartLightConfig.ALERT)
+                    SmartLightConfig.ALERT
                 }
+                else -> {SmartLightConfig.OFF}
             }
+
+            asyncSmartLightConfigurationUpdate(configSelected)
         }
     }
 

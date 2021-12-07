@@ -1,4 +1,4 @@
-package com.example.smartlight.mvi
+package com.example.smartlight.mvvm
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
@@ -19,10 +19,10 @@ import com.example.smartlight.databinding.FragmentSmartLightBinding
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class MviFragment : Fragment() {
+class MvvmFragment : Fragment() {
 
     private var _binding: FragmentSmartLightBinding? = null
-    private lateinit var viewModel: MviViewModel
+    private lateinit var viewModel: MvvmViewModel
 
     private val alphaAnimation = AlphaAnimation(0.2f, 1.0f)
         .apply {
@@ -41,24 +41,24 @@ class MviFragment : Fragment() {
     ): View? {
         _binding = FragmentSmartLightBinding.inflate(inflater, container, false)
 
+        //View lifecycle aware viewModel
+        viewModel = ViewModelProvider(this).get(MvvmViewModel::class.java)
+        viewModel.currentConfig().observe(viewLifecycleOwner, { onConfigCallback(it) })
+
         binding.buttonOff.setOnClickListener { onButtonClick(it) }
         binding.buttonOn.setOnClickListener { onButtonClick(it) }
         binding.buttonAlert.setOnClickListener { onButtonClick(it) }
 
-        //View lifecycle aware viewModel
-        viewModel = ViewModelProvider(this).get(MviViewModel::class.java)
-        viewModel.currentViewState().observe(viewLifecycleOwner, { render(it) })
-
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.onEvent(SmartLightEvent.Loading(true))
     }
 
     private fun onButtonClick(view: View) {
         context?.let {
+            //disable button click
+            enableClicks(false)
+            //show the spinner
+            binding.progressBar.isVisible = true
+
             val configSelected = when (view) {
                 binding.buttonOff -> {
                     SmartLightConfig.OFF
@@ -74,20 +74,19 @@ class MviFragment : Fragment() {
                 }
             }
 
-            viewModel.onEvent(SmartLightEvent.Toggle(configSelected))
+            viewModel.asyncSmartLightConfigurationUpdate(configSelected)
         }
     }
 
-    private fun render(viewState: SmartLightViewState) {
+    private fun onConfigCallback(configValue: SmartLightConfig) {
         if (_binding == null) return
         context?.let {
-
             //hide the spinner
-            binding.progressBar.isVisible = viewState.isLoading
+            binding.progressBar.isGone = true
             //enable clicks
-            enableClicks(viewState.isLoading.not())
+            enableClicks(true)
 
-            when (viewState.config) {
+            when (configValue) {
                 SmartLightConfig.OFF -> {
                     binding.image.animation = null
                     binding.image.setColorFilter(ContextCompat.getColor(it, R.color.black))

@@ -5,7 +5,9 @@
     <string name="title_activity_main">MainActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Monolithic</string>
-    <string name="second_fragment_label">MVI</string>
+    <string name="mvi_fragment_label">MVI</string>
+    <string name="mvvm_fragment_label">MVVM</string>
+    <string name="mvp_fragment_label">MVP</string>
     <string name="next">Next</string>
     <string name="on">ON</string>
     <string name="off">OFF</string>
